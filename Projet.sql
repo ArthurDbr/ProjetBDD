@@ -77,3 +77,13 @@ INSERT INTO attribution VALUES( 3 , 5, 'Faune and Co');
 INSERT INTO attribution VALUES( 4 , 4, 'Accro Tropico'); 
 
 
+CREATE OR REPLACE PROCEDURE getEmployeParc
+AS
+  nom varchar(255) := "";
+  BEGIN
+   accept nom prompt "Entrez nom du parc : "
+   SELECT employe.nom_employe into nom, employe.prenom_employe into prenom FROM employe inner join attribution on employe.id_employe = attribution.id_employe WHERE attribution.nom_parc = nom;	
+  END;
+  /
+  show errors;
+
