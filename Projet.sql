@@ -64,17 +64,17 @@ INSERT INTO employe VALUES (employer_sequence.nextval ,'Valenza', 'Pierre');
 
 CREATE SEQUENCE parcours_sequence START WITH 0 INCREMENT BY 1 MINVALUE 0;
 
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Green Forest', 1, 'Vert'); 
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Les 3 pics', 0, 'Rouge'); 
-INSERT INTO parcours VALUES( parcours_sequence.nextval , '50 nuances de chêne', 1, 'Noir'); 
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Le tempestueux', 1, 'Rouge'); 
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Oasis good', 1, 'Bleu'); 
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Green Forest', 1, 'Vert');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Les 3 pics', 0, 'Rouge');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , '50 nuances de chêne', 1, 'Noir');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Le tempestueux', 1, 'Rouge');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Oasis good', 1, 'Bleu');
 
-INSERT INTO attribution VALUES( 5 , 3, 'Funny Forest'); 
-INSERT INTO attribution VALUES( 1 , 1, 'Funny Forest'); 
-INSERT INTO attribution VALUES( 2 , 2, 'Chemin Magic'); 
-INSERT INTO attribution VALUES( 3 , 5, 'Faune and Co'); 
-INSERT INTO attribution VALUES( 4 , 4, 'Accro Tropico'); 
+INSERT INTO attribution VALUES( 0 , 3, 'Funny Forest');
+INSERT INTO attribution VALUES( 1 , 1, 'Funny Forest');
+INSERT INTO attribution VALUES( 2 , 2, 'Chemin Magic');
+INSERT INTO attribution VALUES( 3 , 0, 'Faune and Co');
+INSERT INTO attribution VALUES( 4 , 4, 'Accro Tropico');
 
 
 CREATE OR REPLACE PROCEDURE getEmployeParc
@@ -82,8 +82,7 @@ AS
   nom varchar(255) := "";
   BEGIN
    accept nom prompt "Entrez nom du parc : "
-   SELECT employe.nom_employe into nom, employe.prenom_employe into prenom FROM employe inner join attribution on employe.id_employe = attribution.id_employe WHERE attribution.nom_parc = nom;	
+   SELECT employe.nom_employe into nom, employe.prenom_employe into prenom FROM employe inner join attribution on employe.id_employe = attribution.id_employe WHERE attribution.nom_parc = nom;
   END;
   /
   show errors;
-
