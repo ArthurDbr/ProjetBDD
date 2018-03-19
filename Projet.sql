@@ -76,13 +76,57 @@ INSERT INTO attribution VALUES( 3 , 3, 'Chemin Magic');
 INSERT INTO attribution VALUES( 4 , 1, 'Faune and Co');
 INSERT INTO attribution VALUES( 5 , 5, 'Accro Tropico');
 
-
-CREATE OR REPLACE PROCEDURE getEmployeParc
+CREATE OR REPLACE PROCEDURE getListeEmployeParc (nom IN VARCHAR2)
 AS
-  nom varchar(255) := "";
   BEGIN
-   accept nom prompt "Entrez nom du parc : "
-   SELECT employe.nom_employe into nom, employe.prenom_employe into prenom FROM employe inner join attribution on employe.id_employe = attribution.id_employe WHERE attribution.nom_parc = nom;
-  END;
-  /
-  show errors;
+   SELECT employe.id_employe int id_emp, employe.nom_employe into nom_emp, employe.prenom_employe into prenom_emp
+            FROM employe inner join attribution on employe.id_employe = attribution.id_employe
+            WHERE attribution.nom_parc = nom;
+END;
+/
+show errors;
+
+CREATE OR REPLACE PROCEDURE getNbrParcoursHard
+AS
+    nb number;
+  BEGIN
+    SELECT count(parcours.difficulte_parcours) into nb FROM parcours where difficulte_parcours = 'Noir';
+END;
+/
+
+CREATE OR REPLACE PROCEDURE getPourcentageParcours (nom IN VARCHAR2)
+AS
+    nb_noir number;
+    nb_rouge number;
+    nb_bleu number;
+    nb_vert number;
+    nb_total number;
+    pourcentage_noir number;
+    pourcentage_rouge number;
+    pourcentage_bleu number;
+    pourcentage_vert number;
+  BEGIN
+    SELECT count(parcours.difficulte_parcours) into nb_noir FROM attribution, parcours
+                where attribution.nom_parc = nom and attribution.id_parcours = parcours.id_parcours and parcours.difficulte_parcours = 'Noir';
+    SELECT count(parcours.difficulte_parcours) into nb_rouge FROM attribution, parcours
+                where attribution.nom_parc = nom and attribution.id_parcours = parcours.id_parcours and parcours.difficulte_parcours = 'Rouge';
+    SELECT count(parcours.difficulte_parcours) into nb_bleu FROM attribution, parcours
+                where attribution.nom_parc = nom and attribution.id_parcours = parcours.id_parcours and parcours.difficulte_parcours = 'Bleu';
+    SELECT count(parcours.difficulte_parcours) into nb_vert FROM attribution, parcours
+                where attribution.nom_parc = nom and attribution.id_parcours = parcours.id_parcours and parcours.difficulte_parcours = 'Vert';
+
+    nb_total := nb_noir + nb_rouge + nb_bleu + nb_vert;
+    pourcentage_noir := (nb_noir/nb_total)*100;
+    pourcentage_rouge := (nb_rouge/nb_total)*100;
+    pourcentage_bleu := (nb_bleu/nb_total)*100;
+    pourcentage_vert := (nb_vert/nb_total)*100;
+
+    DBMS_OUTPUT.PUT_LINE( 'Nombre de parcours du parc -> ' || nb_total) ;
+    DBMS_OUTPUT.PUT_LINE( 'Pourcentage de parcours noirs -> ' || pourcentage_noir || '%' ) ;
+    DBMS_OUTPUT.PUT_LINE( 'Pourcentage de parcours rouges -> ' || pourcentage_rouge || '%' ) ;
+    DBMS_OUTPUT.PUT_LINE( 'Pourcentage de parcours bleus -> ' || pourcentage_bleu || '%' );
+    DBMS_OUTPUT.PUT_LINE( 'Pourcentage de parcours verts -> ' || pourcentage_vert || '%' );
+END;
+/
+
+show errors;
