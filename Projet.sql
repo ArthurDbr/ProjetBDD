@@ -75,6 +75,33 @@ INSERT INTO attribution VALUES( 3 , 3);
 INSERT INTO attribution VALUES( 4 , 1);
 INSERT INTO attribution VALUES( 5 , 5);
 
+CREATE OR REPLACE TRIGGER attributionParcoursEmploye
+BEFORE INSERT or UPDATE ON attribution
+FOR EACH ROW
+DECLARE
+	CURSOR curs IS SELECT parcours.nom_parc from attribution natural join parcours where :new.id_employe = id_employe;
+	nom varchar(255);
+	possible boolean := true;
+	value varchar(255);
+BEGIN
+	select nom_parc into nom from parcours where id_parcours = :new.id_parcours; 
+	OPEN curs;
+		LOOP
+	    FETCH curs INTO value;
+		EXIT WHEN NOT curs%FOUND;
+		    DBMS_OUTPUT.PUT_LINE(value)	;	
+			IF (nom != value) THEN
+		        DBMS_OUTPUT.PUT_LINE('L employe ne peut pas se trouver dans 2 parcs differents '||value|| ' et '||nom);
+				raise_application_error(-20000, 'ERREUR DE LOGIQUE');
+				possible := false;
+			END IF;
+		END LOOP;		
+	CLOSE curs;
+END;
+/
+show errors;		
+
+
 CREATE OR REPLACE PROCEDURE getListeEmployeParc (nom IN VARCHAR2)
 AS
   BEGIN
