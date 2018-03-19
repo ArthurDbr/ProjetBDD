@@ -75,6 +75,14 @@ INSERT INTO attribution VALUES( 3 , 3);
 INSERT INTO attribution VALUES( 4 , 1);
 INSERT INTO attribution VALUES( 5 , 5);
 
+create or replace
+TRIGGER SupprEmploye
+  before DELETE ON employe
+  FOR EACH ROW
+  BEGIN
+    DELETE From attribution WHERE id_employe  = :old.id_employe;
+  END;
+
 CREATE OR REPLACE TRIGGER attributionParcoursEmploye
 BEFORE INSERT or UPDATE ON attribution
 FOR EACH ROW
@@ -84,22 +92,22 @@ DECLARE
 	possible boolean := true;
 	value varchar(255);
 BEGIN
-	select nom_parc into nom from parcours where id_parcours = :new.id_parcours; 
+	select nom_parc into nom from parcours where id_parcours = :new.id_parcours;
 	OPEN curs;
 		LOOP
 	    FETCH curs INTO value;
 		EXIT WHEN NOT curs%FOUND;
-		    DBMS_OUTPUT.PUT_LINE(value)	;	
+		    DBMS_OUTPUT.PUT_LINE(value)	;
 			IF (nom != value) THEN
 		        DBMS_OUTPUT.PUT_LINE('L employe ne peut pas se trouver dans 2 parcs differents '||value|| ' et '||nom);
 				raise_application_error(-20000, 'ERREUR DE LOGIQUE');
 				possible := false;
 			END IF;
-		END LOOP;		
+		END LOOP;
 	CLOSE curs;
 END;
 /
-show errors;		
+show errors;
 
 
 CREATE OR REPLACE PROCEDURE getListeEmployeParc (nom IN VARCHAR2)
@@ -154,5 +162,12 @@ AS
     DBMS_OUTPUT.PUT_LINE( 'Pourcentage de parcours verts -> ' || pourcentage_vert || '%' );
 END;
 /
+
+CREATE OR REPLACE VIEW ParcParcours AS Select p.nom_parc,  p.departement, pa.nom_parcours, pa.status_parcours, pa.difficulte_parcours
+FROM parc p INNER JOIN parcours pa ON p.nom_parc=pa.nom_parc;
+
+CREATE OR REPLACE VIEW NbParcours AS SELECT e.id_employe, e.nom_employe, e.prenom_employe, (SELECT COUNT(*) FROM attribution a WHERE e.id_employe = a.id_employe) AS nb_parcours FROM employe e;
+
+
 
 show errors;
