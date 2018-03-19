@@ -2,9 +2,9 @@ SET SERVEROUTPUT ON;
 DROP SEQUENCE employer_sequence;
 DROP SEQUENCE parcours_sequence;
 DROP TABLE attribution;
-DROP TABLE parcours  cascade constraints;
-DROP TABLE employe cascade constraints;
-DROP TABLE parc cascade constraints;
+DROP TABLE parcours;
+DROP TABLE employe;
+DROP TABLE parc;
 
 
 CREATE TABLE parc
@@ -34,20 +34,19 @@ CREATE TABLE parcours
     nom_parcours VARCHAR(255) ,
     status_parcours int,
     difficulte_parcours VARCHAR(100),
-    PRIMARY KEY (id_parcours)
+    nom_parc VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_parcours),
+	CONSTRAINT fk_nomparc_parcours FOREIGN KEY (nom_parc) REFERENCES parc(nom_parc)
 );
 
 CREATE TABLE attribution
 (
     id_employe INT NOT NULL,
     id_parcours INT NOT NULL,
-    nom_parc VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id_employe, id_parcours),
     CONSTRAINT fk_idemploye_attribution FOREIGN KEY (id_employe) REFERENCES employe(id_employe),
-    CONSTRAINT fk_idparcours_attribution FOREIGN KEY (id_parcours) REFERENCES parcours(id_parcours),
-	CONSTRAINT fk_nomparc_attribution FOREIGN KEY (nom_parc) REFERENCES parc(nom_parc)
+    CONSTRAINT fk_idparcours_attribution FOREIGN KEY (id_parcours) REFERENCES parcours(id_parcours)
 );
-
-
 
 INSERT INTO parc VALUES ( 'Funny Forest', 'Loire Atlantique', '9:30-20:00',  10, 5.36, 15, 50, 0 );
 INSERT INTO parc VALUES ('Chemin Magic', 'Maine et Loire', 	'10-20:30',  	15, 6.36, 25, 60, 0 );
@@ -64,17 +63,17 @@ INSERT INTO employe VALUES (employer_sequence.nextval ,'Valenza', 'Pierre');
 
 CREATE SEQUENCE parcours_sequence START WITH 0 INCREMENT BY 1 MINVALUE 0;
 
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Green Forest', 1, 'Vert');
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Les 3 pics', 0, 'Rouge');
-INSERT INTO parcours VALUES( parcours_sequence.nextval , '50 nuances de chêne', 1, 'Noir');
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Le tempestueux', 1, 'Rouge');
-INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Oasis good', 1, 'Bleu');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Green Forest', 1, 'Vert', 'Funny Forest');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Les 3 pics', 0, 'Rouge', 'Funny Forest');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , '50 nuances de chêne', 1, 'Noir', 'Chemin Magic');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Le tempestueux', 1, 'Rouge', 'Faune and Co');
+INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Oasis good', 1, 'Bleu', 'Accro Tropico');
 
-INSERT INTO attribution VALUES( 1 , 4, 'Funny Forest');
-INSERT INTO attribution VALUES( 2 , 2, 'Funny Forest');
-INSERT INTO attribution VALUES( 3 , 3, 'Chemin Magic');
-INSERT INTO attribution VALUES( 4 , 1, 'Faune and Co');
-INSERT INTO attribution VALUES( 5 , 5, 'Accro Tropico');
+INSERT INTO attribution VALUES( 1 , 4);
+INSERT INTO attribution VALUES( 2 , 2);
+INSERT INTO attribution VALUES( 3 , 3);
+INSERT INTO attribution VALUES( 4 , 1);
+INSERT INTO attribution VALUES( 5 , 5);
 
 CREATE OR REPLACE PROCEDURE getListeEmployeParc (nom IN VARCHAR2)
 AS
