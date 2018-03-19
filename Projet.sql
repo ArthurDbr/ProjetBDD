@@ -70,11 +70,11 @@ INSERT INTO parcours VALUES( parcours_sequence.nextval , '50 nuances de chêne',
 INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Le tempestueux', 1, 'Rouge');
 INSERT INTO parcours VALUES( parcours_sequence.nextval , 'Oasis good', 1, 'Bleu');
 
-INSERT INTO attribution VALUES( 0 , 3, 'Funny Forest');
-INSERT INTO attribution VALUES( 1 , 1, 'Funny Forest');
-INSERT INTO attribution VALUES( 2 , 2, 'Chemin Magic');
-INSERT INTO attribution VALUES( 3 , 0, 'Faune and Co');
-INSERT INTO attribution VALUES( 4 , 4, 'Accro Tropico');
+INSERT INTO attribution VALUES( 1 , 4, 'Funny Forest');
+INSERT INTO attribution VALUES( 2 , 2, 'Funny Forest');
+INSERT INTO attribution VALUES( 3 , 3, 'Chemin Magic');
+INSERT INTO attribution VALUES( 4 , 1, 'Faune and Co');
+INSERT INTO attribution VALUES( 5 , 5, 'Accro Tropico');
 
 
 CREATE OR REPLACE PROCEDURE getEmployeParc
