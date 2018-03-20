@@ -168,6 +168,17 @@ FROM parc p INNER JOIN parcours pa ON p.nom_parc=pa.nom_parc;
 
 CREATE OR REPLACE VIEW NbParcours AS SELECT e.id_employe, e.nom_employe, e.prenom_employe, (SELECT COUNT(*) FROM attribution a WHERE e.id_employe = a.id_employe) AS nb_parcours FROM employe e;
 
-
-
 show errors;
+
+--Attribution des droits
+grant select, update, insert, delete on parc to L3_81;
+  grant select, update, insert, delete on parcours to L3_81;
+    grant select, update, insert, delete on employe to L3_81;
+      grant select, update, insert, delete on attribution to L3_81;
+
+grant select, update, insert, delete on attribution to L3_86;
+  grant select, update, insert, delete on employe to L3_86;
+
+grant select on parcours to L3_88;
+  grant select on employe to L3_88;
+    grant select on attribution to L3_88;
