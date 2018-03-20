@@ -109,17 +109,6 @@ END;
 /
 show errors;
 
-CREATE OR REPLACE PROCEDURE getListeEmployeParc(nom VARCHAR2)
-AS
-  BEGIN
-   SELECT employe.id_employe INTO id, employe.nom_employe INTO nom, employe.prenom_employe INTO prenom
-            FROM employe inner join attribution on employe.id_employe = attribution.id_employe INNER JOIN parcours
-            ON attribution.id_parcours = parcours.id_parcours
-            WHERE parcours.nom_parc = nom;
-END;
-/
-show errors;
-
 CREATE OR REPLACE PROCEDURE getNbrParcoursHard
 AS
     nb number;
