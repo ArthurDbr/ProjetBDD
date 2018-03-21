@@ -167,6 +167,7 @@ grant select, update, insert, delete on parc to L3_81;
 
 grant select, update, insert, delete on attribution to L3_86;
   grant select, update, insert, delete on employe to L3_86;
+  	grant select on parcours to L3_86;
 
 grant select on parcours to L3_88;
   grant select on employe to L3_88;
